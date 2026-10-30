@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>راهنمای دستورات ربات سروش</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', Tahoma, sans-serif; }
+        body { background: #0a0a0f; color: #e0e0e0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #2a2a4a;
+            text-align: center;
+        }
+        .header h1 { font-size: 32px; color: #00d4ff; }
+        .header .sub { color: #888; font-size: 14px; margin-top: 5px; }
+        .header .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 10px 5px;
+        }
+        .badge-green { background: #00c853; color: #fff; }
+        .badge-yellow { background: #ffab00; color: #000; }
+        .badge-blue { background: #00d4ff; color: #000; }
+        .badge-red { background: #d50000; color: #fff; }
+        .badge-purple { background: #7c3aed; color: #fff; }
+        .badge-orange { background: #ff6f00; color: #fff; }
+        
+        .section {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2a2a4a;
+        }
+        .section h2 {
+            color: #00d4ff;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .section .count {
+            font-size: 14px;
+            color: #888;
+            margin-right: 10px;
+        }
+        
+        .cmd-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 10px;
+        }
+        .cmd-item {
+            background: #0a0a0f;
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #2a2a4a;
+            transition: 0.3s;
+        }
+        .cmd-item:hover {
+            border-color: #00d4ff;
+            transform: translateY(-2px);
+        }
+        .cmd-item .cmd {
+            color: #00d4ff;
+            font-weight: bold;
+            font-size: 14px;
+            direction: ltr;
+            display: inline-block;
+            background: #0a1a2a;
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid #00d4ff33;
+        }
+        .cmd-item .desc {
+            color: #aaa;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        .tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin: 2px;
+        }
+        .tag-admin { background: #d50000; color: #fff; }
+        .tag-owner { background: #ffab00; color: #000; }
+        .tag-all { background: #00c853; color: #fff; }
+        .tag-reply { background: #7c3aed; color: #fff; }
+        .tag-both { background: #00bcd4; color: #000; }
+        
+        .note {
+            background: #0a2a3a;
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        .note strong { color: #00d4ff; }
+        .note p { margin: 5px 0; }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: #aaa;
+        }
+        .legend-item .dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-green { background: #00c853; }
+        .dot-red { background: #d50000; }
+        .dot-yellow { background: #ffab00; }
+        .dot-purple { background: #7c3aed; }
+        .dot-cyan { background: #00bcd4; }
+        
+        @media (max-width: 600px) {
+            .cmd-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 24px; }
+            .legend { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>📋 راهنمای دستورات ربات سروش</h1>
+            <div class="sub">لیست کامل دستورات قابل استفاده در گروه</div>
+            <div>
+                <span class="badge badge-green">۸۳ دستور</span>
+                <span class="badge badge-yellow">نسخه ۲.۰.۰</span>
+                <span class="badge badge-blue">ربات مدیریت گروه سروش</span>
+            </div>
+            <div class="legend">
+                <span class="legend-item"><span class="dot dot-green"></span> همه کاربران</span>
+                <span class="legend-item"><span class="dot dot-red"></span> ادمین</span>
+                <span class="legend-item"><span class="dot dot-yellow"></span> مالک</span>
+                <span class="legend-item"><span class="dot dot-purple"></span> نیاز به ریپلای</span>
+                <span class="legend-item"><span class="dot dot-cyan"></span> مالک + ادمین</span>
+            </div>
+        </div>
+
+        <!-- ۱. دستورات عمومی -->
+        <div class="section">
+            <h2>🎯 دستورات عمومی <span class="count">(۹ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">/start</span>
+                    <span class="tag tag-both">مالک+ادمین</span>
+                    <div class="desc">فعال‌سازی ربات در گروه (اولین نفر مالک میشه)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">فعال</span>
+                    <span class="tag tag-both">مالک+ادمین</span>
+                    <div class="desc">فعال‌سازی ربات در گروه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">غیر فعال</span>
+                    <span class="tag tag-both">مالک+ادمین</span>
+                    <div class="desc">غیرفعال‌سازی ربات در گروه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">شناسه چت</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">نمایش آیدی گروه و آیدی شما</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سکه</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">انداختن سکه (خط یا شیر)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">تاس</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">انداختن تاس (۱ تا ۶)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">دوست پسر میخوام</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">معرفی یک کاربر پسر تصادفی از گروه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">دوست دختر میخوام</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">معرفی یک کاربر دختر تصادفی از گروه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">راهنما</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">نمایش کانال راهنما و دستورات</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۲. دستورات فیلتر -->
+        <div class="section">
+            <h2>🔒 دستورات فیلتر <span class="count">(۱۷ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">لینک باز / لینک قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر ارسال لینک</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ایدی باز / ایدی قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر ارسال ایدی (@username)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">فحش باز / فحش قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر کلمات نامناسب</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">فوروارد باز / فوروارد قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر پیام‌های فوروارد شده</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">کدهنگی باز / کدهنگی قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر متن‌های طولانی (بالای ۲۰۰۰ کاراکتر)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">اسپم باز / اسپم قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر پیام‌های تکراری</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سیاسی باز / سیاسی قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر کلمات سیاسی (پیش‌فرض: خاموش)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">تبلیغ باز / تبلیغ قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">کنترل فیلتر تبلیغات (پیش‌فرض: خاموش)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">لیست قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش وضعیت همه فیلترها در یک نگاه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">فیلتر کلمه</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">افزودن کلمه سفارشی به لیست فحش</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حذف فیلتر کلمه</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">حذف کلمه از لیست فحش سفارشی</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">لیست فحش</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش لیست کلمات فحش</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۳. دستورات مدیریت کاربران -->
+        <div class="section">
+            <h2>👥 مدیریت کاربران <span class="count">(۱۳ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">بن</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">بن کردن کاربر مورد نظر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حذف بن</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">خارج کردن کاربر از لیست سیاه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">اخطار</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">اخطار دادن به کاربر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">اخطار عدد</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">تغییر حداکثر اخطار (۱ تا ۳۰) - مثال: اخطار 7</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ریست اخطار</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">ریست کردن اخطارهای کاربر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">بن فعال</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">فعال کردن بن خودکار بعد از اخطار</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">بن غیر فعال</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">غیرفعال کردن بن خودکار</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سکوت مدت دلیل</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">سکوت کاربر - مثال: سکوت 60 اسپم</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">برداشتن سکوت</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">برداشتن سکوت کاربر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">لیست سکوت</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش لیست کاربران سکوت شده با تاریخ شمسی</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">معاف</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">معاف کردن کاربر از فیلترها</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حذف معاف</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">برداشتن معافیت کاربر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">لیست معاف / لیست سیاه</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش لیست کاربران معاف یا بن شده</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۴. دستورات مدیریت ادمین‌ها -->
+        <div class="section">
+            <h2>🛡️ مدیریت ادمین‌ها <span class="count">(۴ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">ادمین</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">افزودن کاربر به عنوان ادمین</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حذف ادمین</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">حذف کاربر از ادمین‌ها</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">لیست ادمین</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش لیست ادمین‌ها و مالک</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">تغییر مالک</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">تغییر مالک گروه (فقط مالک فعلی)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۵. دستورات لقب، اصل و جنسیت -->
+        <div class="section">
+            <h2>🏷️ لقب، اصل و جنسیت <span class="count">(۸ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">ثبت لقب</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">ثبت لقب - مثال: ثبت لقب ارباب</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ثبت اصل</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">ثبت اصل/شهر - مثال: ثبت اصل تهران</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">دخترم</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">ثبت جنسیت خودتان به عنوان دختر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">پسرم</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">ثبت جنسیت خودتان به عنوان پسر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">دختر</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">ثبت جنسیت کاربر ریپلای شده به عنوان دختر</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">پسر</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">ثبت جنسیت کاربر ریپلای شده به عنوان پسر</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۶. دستورات آمار -->
+        <div class="section">
+            <h2>📊 آمار <span class="count">(۵ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">آمار</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش آمار کلی گروه (بن، حذف، اخطار)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">آمار من</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">نمایش آمار خودتان (لقب، اصل، جنسیت، پیام، اخطار)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">آمارش</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش آمار کاربر ریپلای شده</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">آمار گروه</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">نمایش آمار کامل گروه (تاریخ فعال‌سازی، سخنگو، وضعیت)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ریست آمار</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">ریست کردن آمار گروه</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۷. دستورات سخنگو -->
+        <div class="section">
+            <h2>🎭 سخنگو <span class="count">(۱۰ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">تغییر سخنگو</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">نمایش لیست سخنگوهای موجود</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سخنگو انیمه</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">تغییر سخنگو به حالت انیمه‌ای</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سخنگو بی ادب</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">تغییر سخنگو به حالت بی‌ادب</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سخنگو با ادب</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">تغییر سخنگو به حالت مودبانه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سخنگو برنامه نویسی</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">تغییر سخنگو به حالت برنامه‌نویسی</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سخنگو خفن</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">تغییر سخنگو به حالت خفن</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سخنگو روشن</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">فعال کردن پاسخ‌دهی خودکار</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">سخنگو خاموش</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">غیرفعال کردن پاسخ‌دهی خودکار</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حالت پر حرفی</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاسخ‌دهی به همه پیام‌ها</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حالت کم حرفی</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاسخ‌دهی به ۳۰٪ پیام‌ها</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۸. دستورات مدیریت گروه -->
+        <div class="section">
+            <h2>🔓 مدیریت گروه <span class="count">(۴ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">گروه باز</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">باز کردن گروه برای ارسال پیام همه کاربران</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">گروه قفل</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">قفل کردن گروه (فقط ادمین‌ها پیام بفرستن)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">reset</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">ریست کامل اطلاعات گروه (دیتابیس + فایل‌ها)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">/reset</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">همان دستور reset</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۹. دستورات قوانین -->
+        <div class="section">
+            <h2>📜 قوانین گروه <span class="count">(۳ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">ثبت قانون</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">ثبت قانون با ریپلای روی یک پیام</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حذف قانون</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">حذف قانون گروه</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">قوانین / قانون</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">نمایش قوانین گروه</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۱۰. دستورات سنجاق -->
+        <div class="section">
+            <h2>📌 سنجاق پیام <span class="count">(۲ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">سنجاق / پین</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">سنجاق کردن پیام ریپلای شده</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">برداشتن سنجاق</span>
+                    <span class="tag tag-reply">ریپلای</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">برداشتن سنجاق پیام ریپلای شده</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۱۱. دستورات ریست لیست -->
+        <div class="section">
+            <h2>🔄 ریست لیست‌ها <span class="count">(۶ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">ریست لیست</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاک کردن همه لیست‌ها (بن، اخطار، معاف، سکوت)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ریست لیست ادمین</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاک کردن لیست ادمین‌ها</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ریست لیست معاف</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاک کردن لیست معاف‌ها</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ریست لیست سیاه</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاک کردن لیست سیاه (بن‌ها)</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ریست لیست اخطار</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاک کردن لیست اخطارها</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">ریست لیست سکوت</span>
+                    <span class="tag tag-owner">مالک</span>
+                    <div class="desc">پاک کردن لیست سکوت‌ها</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ۱۲. تاریخ و حذف پیام -->
+        <div class="section">
+            <h2>📅 تاریخ و حذف پیام <span class="count">(۲ دستور)</span></h2>
+            <div class="cmd-grid">
+                <div class="cmd-item">
+                    <span class="cmd">تاریخ</span>
+                    <span class="tag tag-all">همه</span>
+                    <div class="desc">نمایش تاریخ کامل (شمسی + میلادی + قمری) با ساعت</div>
+                </div>
+                <div class="cmd-item">
+                    <span class="cmd">حذف پیام تعداد</span>
+                    <span class="tag tag-admin">ادمین</span>
+                    <div class="desc">حذف تعداد مشخصی پیام اخیر (حداکثر ۵۰۰) - مثال: حذف پیام 10</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- راهنما -->
+        <div class="section">
+            <h2>📌 راهنمای نشانه‌ها</h2>
+            <div class="note" style="margin-top:0;">
+                <p><span class="tag tag-all">همه</span> همه کاربران گروه می‌توانند استفاده کنند</p>
+                <p><span class="tag tag-admin">ادمین</span> فقط ادمین‌ها و مالک می‌توانند استفاده کنند</p>
+                <p><span class="tag tag-owner">مالک</span> فقط مالک گروه می‌تواند استفاده کند</p>
+                <p><span class="tag tag-both">مالک+ادمین</span> مالک گروه و ادمین‌ها</p>
+                <p><span class="tag tag-reply">ریپلای</span> باید روی پیام کاربر ریپلای کنید</p>
+            </div>
+            <div class="note" style="margin-top:10px;">
+                <strong>💡 نکته:</strong> دستورات <span class="tag tag-reply">ریپلای</span> فقط زمانی کار می‌کنند که روی پیام یک کاربر ریپلای کنید.
+            </div>
+            <div class="note" style="margin-top:10px; border-color: #ffab00;">
+                <strong>⚠️ تذکر مهم:</strong>
+                <br>• دستور <strong>تغییر مالک</strong> فقط توسط <strong>مالک فعلی</strong> گروه قابل انجام است.
+                <br>• برای ساخت اخطار خودکار، باید <strong>بن فعال</strong> باشد.
+                <br>• فیلترهای <strong>سیاسی</strong> و <strong>تبلیغ</strong> به صورت پیش‌فرض <strong>خاموش</strong> هستند.
+            </div>
+            <div class="note" style="margin-top:10px; border-color: #7c3aed;">
+                <strong>🎭 سخنگو:</strong> ربات به کلمات کلیدی مثل «سلام»، «چطوری»، «خوبی» و... پاسخ می‌دهد. در حالت <strong>کم حرفی</strong> فقط ۳۰٪ پیام‌ها را جواب می‌دهد.
+            </div>
+            <div class="note" style="margin-top:10px; border-color: #00c853;">
+                <strong>🛡️ فیلترهای پیش‌فرض فعال:</strong> فحش، لینک، ایدی، فوروارد، کدهنگی، اسپم
+                <br>
+                <strong>🚫 فیلترهای پیش‌فرض غیرفعال:</strong> سیاسی، تبلیغ
+            </div>
+        </div>
+
+        <div style="text-align:center;color:#555;font-size:12px;margin-top:20px;padding:20px;border-top:1px solid #2a2a4a;">
+            ساخته شده توسط @abc5030 | نسخه ۲.۰.۰ | تمامی حقوق محفوظ است
+        </div>
+
+    </div>
+</body>
+</html>
